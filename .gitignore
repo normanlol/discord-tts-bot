@@ -102,3 +102,12 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Private files
+config.json
+db.json
+data/
+
+# Test files
+/tests/small-audio.mp3
+/tests/large-audio.mp3

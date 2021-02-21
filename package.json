@@ -1,0 +1,33 @@
+{
+  "name": "discord-tts-bot",
+  "version": "1.0.0",
+  "description": "completely open-sourced and free tts bot for discord",
+  "main": "index.js",
+  "scripts": {
+    "test": "node tests/index.js",
+    "start": "node index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/normanlol/discord-tts-bot.git"
+  },
+  "keywords": [
+    "discord",
+    "tts",
+    "text-to-speech"
+  ],
+  "author": "normanlol",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/normanlol/discord-tts-bot/issues"
+  },
+  "homepage": "https://github.com/normanlol/discord-tts-bot#readme",
+  "dependencies": {
+    "@discordjs/opus": "^0.4.0",
+    "@vitalets/google-translate-api": "^5.0.0",
+    "discord.js": "^12.5.1",
+    "ffmpeg-static": "^4.2.7",
+    "google-tts-languages": "^1.0.4",
+    "node-google-tts-api": "^1.1.1"
+  }
+}
