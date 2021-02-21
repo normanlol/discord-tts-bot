@@ -206,8 +206,8 @@ bot.on("message", async function (message) {
         }
         var db = JSON.parse(fs.readFileSync(__dirname + "/db.json"));
         if (!fs.existsSync(__dirname + "/data/")) {fs.mkdirSync(__dirname + "/data/");}
-        if (db[message.guild.id].lang) {var lang = db[message.guild.id].lang;} else {var lang = config.defaultLang;}
-        if (db[message.guild.id].autoTrans) {var autoTrans = db[message.guild.id].autoTrans;} else {var autoTrans = config.autoTranslate;}
+        if (db[message.guild.id].lang !== undefined) {var lang = db[message.guild.id].lang;} else {var lang = config.defaultLang;}
+        if (db[message.guild.id].autoTrans !== undefined) {var autoTrans = db[message.guild.id].autoTrans;} else {var autoTrans = config.autoTranslate;}
         if (db[message.guild.id] && db[message.guild.id].channel == message.channel.id) {
             if (autoTrans == "true") {
                 translate(message.cleanContent, {to: lang}).then(function(res) {
