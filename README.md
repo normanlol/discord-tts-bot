@@ -3,7 +3,7 @@
 
 *[The icon](https://pixabay.com/vectors/microphone-audio-micro-recording-2104091/) is from [IO-Images](https://pixabay.com/users/io-images-1096650/) from [Pixabay](https://pixabay.com/).*
 
-[Demo Video](https://www.youtube.com/watch?v=WzdQZB3M-Gk) 
+[Demo Video](https://www.youtube.com/watch?v=WzdQZB3M-Gk) | [Commands](/docs/README.md#commands) | 
 
 ## features 
 - Auto-translation of messages.

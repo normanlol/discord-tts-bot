@@ -6,6 +6,8 @@ To configure the bot, you must first run the command ``node index`` once.
 
 When you do this, a file is generated in the directory the code is in. You then must configure the bot.
 
+If you already added your token, you can skip down to [here](#further-customization).
+
 There is *one* thing you must fill in yourself, and the code does the rest for you. If you have not already go to [discord.com/developers/applications](https://discord.com/developers/applications) and create an app by hitting "New Application" at the top once you sign in.
 
 ![Here is where you find "New Application", where the cursor is](/docs/assets/new_app.png)

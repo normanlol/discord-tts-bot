@@ -12,7 +12,7 @@ if (!fs.existsSync(__dirname + "/config.json")) {
     fs.writeFileSync(__dirname + "/config.json", JSON.stringify(template));
     console.log("you can find it @ " + __dirname + "/config.json");
     console.log();
-    console.log("if you need more information of help on how to start, go here: <temp>")
+    console.log("if you need more information of help on how to start, go here: https://github.com/normanlol/discord-tts-bot/tree/main/docs#configuration")
     return;
 }
 const config = JSON.parse(fs.readFileSync(__dirname + "/config.json"));
@@ -192,7 +192,7 @@ bot.on("message", async function (message) {
                 var embed = new discordjs.MessageEmbed();
                 embed.setTitle("Commands list is here!");
                 embed.setDescription("Above is the link to the commands list for TTSBot.")
-                embed.setURL("temp")
+                embed.setURL("https://github.com/normanlol/discord-tts-bot/tree/main/docs#commands")
                 message.channel.send(embed);
             return;
         }
