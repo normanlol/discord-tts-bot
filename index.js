@@ -236,7 +236,7 @@ bot.on("message", async function (message) {
                                 fs.unlinkSync(__dirname + "/data/" + message.id + ".mp3");
                             }
                         }).catch(function(err) {
-                            message.channel.send("```" + err.stack + "```");
+                            message.channel.send("```" + err.message + "```");
                             message.channel.send("Please report this to the devs @ <https://github.com/normanlol/discord-tts-bot>");
                         });
                     } else {
@@ -261,12 +261,12 @@ bot.on("message", async function (message) {
                                 fs.unlinkSync(__dirname + "/data/" + message.id + ".mp3");
                             }
                         }).catch(function(err) {
-                            message.channel.send("```" + err.stack + "```");
+                            message.channel.send("```" + err.message + "```");
                             message.channel.send("Please report this to the devs @ <https://github.com/normanlol/discord-tts-bot>");
                         });
                     }
                 }).catch(function(err) {
-                    message.channel.send("```" + err.stack + "```");
+                    message.channel.send("```" + err.message + "```");
                     message.channel.send("Please report this to the devs @ <https://github.com/normanlol/discord-tts-bot>");
                 });
             } else {
@@ -295,7 +295,7 @@ bot.on("message", async function (message) {
                             fs.unlinkSync(__dirname + "/data/" + message.id + ".mp3");
                         }
                     }).catch(function(err) {
-                        message.channel.send("```" + err.stack + "```");
+                        message.channel.send("```" + err.message + "```");
                         message.channel.send("Please report this to the devs @ <https://github.com/normanlol/discord-tts-bot>");
                     });
                 } else {
@@ -320,7 +320,7 @@ bot.on("message", async function (message) {
                             fs.unlinkSync(__dirname + "/data/" + message.id + ".mp3");
                         }
                     }).catch(function(err) {
-                        message.channel.send("```" + err.stack + "```");
+                        message.channel.send("```" + err.message + "```");
                         message.channel.send("Please report this to the devs @ <https://github.com/normanlol/discord-tts-bot>");
                     });
                 }
