@@ -11,6 +11,8 @@ if (!fs.existsSync(__dirname + "/config.json")) {
     }
     fs.writeFileSync(__dirname + "/config.json", JSON.stringify(template));
     console.log("you can find it @ " + __dirname + "/config.json");
+    console.log();
+    console.log("if you need more information of help on how to start, go here: <temp>")
     return;
 }
 const config = JSON.parse(fs.readFileSync(__dirname + "/config.json"));
@@ -174,6 +176,24 @@ bot.on("message", async function (message) {
                     message.channel.send(embed);
                     return;
                 }
+            return;
+
+            case "info":
+                var embed = new discordjs.MessageEmbed();
+                embed.setTitle("TTSBot Project Page")
+                embed.setAuthor("This is TTSBot!");
+                embed.setDescription("An open-sourced text-to-speech bot written in NodeJS.");
+                embed.setURL("https://github.com/normanlol/discord-tts-bot")
+                embed.setColor("00ecff");
+                message.channel.send(embed);
+            return;
+
+            case "commands":
+                var embed = new discordjs.MessageEmbed();
+                embed.setTitle("Commands list is here!");
+                embed.setDescription("Above is the link to the commands list for TTSBot.")
+                embed.setURL("temp")
+                message.channel.send(embed);
             return;
         }
     } else if (fs.existsSync(__dirname + "/db.json")) {
