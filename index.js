@@ -65,8 +65,8 @@ bot.on("message", async function (message) {
                     if (message.guild.channels.cache.get(id) !== undefined && message.guild.channels.cache.get(id).type == "text") {
                         if (fs.existsSync(__dirname + "/db.json")) {
                             var json = JSON.parse(fs.readFileSync(__dirname + "/db.json"));
-                            json[message.guild.id].channel = id;
                             if (!json[message.guild.id]) {json[message.guild.id] = {};}
+                            json[message.guild.id].channel = id;
                             fs.writeFileSync(__dirname + "/db.json", JSON.stringify(json))
                         } else {
                             var json = {};
