@@ -42,7 +42,8 @@ To customize your bot further here are some definitions of the other variables.
     "id":"",
     "prefix":"t!",
     "autoTranslate":"false",
-    "defaultLang":"en"
+    "defaultLang":"en",
+    "autopostFile":"true"
 }
 ```
 
@@ -54,11 +55,13 @@ To customize your bot further here are some definitions of the other variables.
 
 ``prefix`` - This is what you put before the bot commands. For example if prefix would be set to ``"!"`` then the command to ping the bot would be ``!ping``.
 
-``autoTranslate`` - The default option of automatically translating a message to the ``defaultLang`` variable (Must be ``"true"`` or ``"false"``).
+``autoTranslate`` - The default option of automatically translating a message to the ``defaultLang`` variable. (Must be ``"true"`` or ``"false"``)
 
 ``defaultLang`` - The default language of the TTS bot and for the ``autoTranslate`` variable. (Must be a valid language code surrounded by quotes, like ``"en"``)
 
-**Note** - The ``autoTranslate`` and ``defaultLang`` variables can be set on a server by server basis using commands. You can change this yourself by editing the ``db.json`` file in your code, but it is reccomended to use server commands.
+``autopostFile`` - Allows automatic posting of the MP3 file when you are in voice chat. (Must be ``"true"`` or ``"false"``)
+
+**Note** - The ``autoTranslate``, ``autopostFile``, and ``defaultLang`` variables can be set on a server by server basis using commands. You can change this yourself by editing the ``db.json`` file in your code, but it is reccomended to use server commands.
 
 ## Commands
 Here is a list of commands for the bot. The default prefix for the bot is ``t!`` but this can be changed in the [configuration](#configuration).
@@ -72,6 +75,8 @@ Here is a list of commands for the bot. The default prefix for the bot is ``t!``
 ``t!setLanguage <language name/code>`` - Set the language for the server's commands.
 
 ``t!setTranslation <true|false>`` - Sets the auto-translation setting.
+
+``t!autopostFile <true|false>`` - Sets the auto-posting of the MP3 file on or off.
 
 ``t!info`` - Outputs a little blurb about the bot
 

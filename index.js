@@ -7,7 +7,8 @@ if (!fs.existsSync(__dirname + "/config.json")) {
         "id": "",
         "prefix": "t!",
         "autoTranslate": "false",
-        "defaultLang": "en"
+        "defaultLang": "en",
+        "autopostFile": "true"
     }
     fs.writeFileSync(__dirname + "/config.json", JSON.stringify(template));
     console.log("you can find it @ " + __dirname + "/config.json");
@@ -153,7 +154,7 @@ bot.on("message", async function (message) {
             case "setTranslation": 
                 if (message.guild) {
                     var opt = message.content.split(config.prefix + "setTranslation ")[1];
-                    if (opt !== undefined || opt == "true" || opt == "false") {
+                    if (opt !== undefined && opt == "true" || opt == "false") {
                         var json = JSON.parse(fs.readFileSync(__dirname + "/db.json"));
                         if (!json[message.guild.id]) {json[message.guild.id] = {};}
                         json[message.guild.id].autoTrans = opt;
@@ -164,8 +165,36 @@ bot.on("message", async function (message) {
                         message.channel.send(embed);
                     } else {
                         var embed = new discordjs.MessageEmbed();
-                        embed.setAuthor("Failed! The channel could not be set!");
-                        embed.setDescription("Either the ID was invalid or is not visible to the bot. Try again using the same command.");
+                        embed.setAuthor("setTranslation could not be set!");
+                        embed.setDescription("The selection must be 'true' or 'false'!");
+                        embed.setColor("fc1b1f");
+                        message.channel.send(embed);
+                    }
+                } else {
+                    var embed = new discordjs.MessageEmbed();
+                    embed.setAuthor("This command cannot be done in DMs!");
+                    embed.setColor("fc1b1f");
+                    message.channel.send(embed);
+                    return;
+                }
+            return;
+
+            case "autopostFile":
+                if (message.guild) {
+                    var opt = message.content.split(config.prefix + "autopostFile ")[1];
+                    if (opt !== undefined && opt == "true" || opt == "false") {
+                        var json = JSON.parse(fs.readFileSync(__dirname + "/db.json"));
+                        if (!json[message.guild.id]) {json[message.guild.id] = {};}
+                        json[message.guild.id].autopostFile = opt;
+                        fs.writeFileSync(__dirname + "/db.json", JSON.stringify(json));
+                        var embed = new discordjs.MessageEmbed();
+                        embed.setAuthor("Success! The autoposting of the mp3 is set to " + opt + ".");
+                        embed.setColor("00c610");
+                        message.channel.send(embed);
+                    } else {
+                        var embed = new discordjs.MessageEmbed();
+                        embed.setAuthor("autopostFile could not be set!");
+                        embed.setDescription("The selection must be 'true' or 'false'!");
                         embed.setColor("fc1b1f");
                         message.channel.send(embed);
                     }
@@ -209,6 +238,7 @@ bot.on("message", async function (message) {
         if (db[message.guild.id] && db[message.guild.id].channel == message.channel.id) {
             if (db[message.guild.id].lang !== undefined) {var lang = db[message.guild.id].lang;} else {var lang = config.defaultLang;}
             if (db[message.guild.id].autoTrans !== undefined) {var autoTrans = db[message.guild.id].autoTrans;} else {var autoTrans = config.autoTranslate;}
+            if (db[message.guild.id].autopostFile !== undefined) {var autopostFile = db[message.guild.id].autopostFile} else if (config.autoPostFile) {var autopostFile = config.autopostFile} else {var autopostFile = "true";}
             if (autoTrans == "true") {
                 translate(message.cleanContent, {to: lang}).then(function(res) {
                     var msg = res.text.toString();
@@ -222,7 +252,7 @@ bot.on("message", async function (message) {
                             var data = tts.concat(data);
                             fs.writeFileSync(__dirname + "/data/" + message.id + ".mp3", data);
                             if (connection) {
-                                await message.channel.send("" , {files: [__dirname + "/data/" + message.id + ".mp3"]});
+                                if (autopostFile == "true") {await message.channel.send("" , {files: [__dirname + "/data/" + message.id + ".mp3"]});}
                                 var d = await connection.play(__dirname + "/data/" + message.id + ".mp3");
                                 d.on("finish", function () {
                                     d.destroy();
@@ -236,10 +266,12 @@ bot.on("message", async function (message) {
                                 fs.unlinkSync(__dirname + "/data/" + message.id + ".mp3");
                             }
                         }).catch(function(err) {
-                            
-                        console.log(err.stack)
-                        message.channel.send("```" + err.message + "```").catch(function(err) {});
-                            message.channel.send("Please report this to the devs @ <https://github.com/normanlol/discord-tts-bot>");
+                            console.log(err.stack);
+                            message.channel.send("```" + err.stack + "```").then(function() {
+                                message.channel.send("Please report this to the devs @ <https://github.com/normanlol/discord-tts-bot>");
+                            }).catch(function(err) {
+                                message.channel.send("The error that occuredcould not be posted to Discord. Tell the operator to check the logs.");
+                            });
                         });
                     } else {
                         tts.get({
@@ -249,7 +281,7 @@ bot.on("message", async function (message) {
                             if (message.member.voice.channel) {var connection = await message.member.voice.channel.join();}
                             fs.writeFileSync(__dirname + "/data/" + message.id + ".mp3", data);
                             if (connection) {
-                                await message.channel.send("" , {files: [__dirname + "/data/" + message.id + ".mp3"]});
+                                if (autopostFile == "true") {await message.channel.send("" , {files: [__dirname + "/data/" + message.id + ".mp3"]});}
                                 var d = await connection.play(__dirname + "/data/" + message.id + ".mp3");
                                 d.on("finish", function () {
                                     d.destroy();
@@ -263,17 +295,21 @@ bot.on("message", async function (message) {
                                 fs.unlinkSync(__dirname + "/data/" + message.id + ".mp3");
                             }
                         }).catch(function(err) {
-                            
-                        console.log(err.stack)
-                        message.channel.send("```" + err.message + "```").catch(function(err) {});
-                            message.channel.send("Please report this to the devs @ <https://github.com/normanlol/discord-tts-bot>");
+                            console.log(err.stack);
+                            message.channel.send("```" + err.stack + "```").then(function() {
+                                message.channel.send("Please report this to the devs @ <https://github.com/normanlol/discord-tts-bot>");
+                            }).catch(function(err) {
+                                message.channel.send("The error that occuredcould not be posted to Discord. Tell the operator to check the logs.");
+                            });
                         });
                     }
                 }).catch(function(err) {
-                    
-                        console.log(err.stack)
-                        message.channel.send("```" + err.message + "```").catch(function(err) {});
-                    message.channel.send("Please report this to the devs @ <https://github.com/normanlol/discord-tts-bot>");
+                    console.log(err.stack);
+                    message.channel.send("```" + err.stack + "```").then(function() {
+                        message.channel.send("Please report this to the devs @ <https://github.com/normanlol/discord-tts-bot>");
+                    }).catch(function(err) {
+                        message.channel.send("The error that occuredcould not be posted to Discord. Tell the operator to check the logs.");
+                    });
                 });
             } else {
                 var msg = message.cleanContent.toString();
@@ -287,7 +323,7 @@ bot.on("message", async function (message) {
                         var data = tts.concat(data);
                         fs.writeFileSync(__dirname + "/data/" + message.id + ".mp3", data);
                         if (connection) {
-                            await message.channel.send("" , {files: [__dirname + "/data/" + message.id + ".mp3"]});
+                            if (autopostFile == "true") {await message.channel.send("" , {files: [__dirname + "/data/" + message.id + ".mp3"]});}
                             var d = await connection.play(__dirname + "/data/" + message.id + ".mp3");
                             d.on("finish", function () {
                                 d.destroy();
@@ -301,10 +337,12 @@ bot.on("message", async function (message) {
                             fs.unlinkSync(__dirname + "/data/" + message.id + ".mp3");
                         }
                     }).catch(function(err) {
-                        
-                        console.log(err.stack)
-                        message.channel.send("```" + err.message + "```").catch(function(err) {});
-                        message.channel.send("Please report this to the devs @ <https://github.com/normanlol/discord-tts-bot>");
+                        console.log(err.stack);
+                        message.channel.send("```" + err.stack + "```").then(function() {
+                            message.channel.send("Please report this to the devs @ <https://github.com/normanlol/discord-tts-bot>");
+                        }).catch(function(err) {
+                            message.channel.send("The error that occuredcould not be posted to Discord. Tell the operator to check the logs.");
+                        });
                     });
                 } else {
                     tts.get({
@@ -314,7 +352,7 @@ bot.on("message", async function (message) {
                         if (message.member.voice.channel) {var connection = await message.member.voice.channel.join();}
                         fs.writeFileSync(__dirname + "/data/" + message.id + ".mp3", data);
                         if (connection) {
-                            await message.channel.send("" , {files: [__dirname + "/data/" + message.id + ".mp3"]});
+                            if (autopostFile == "true") {await message.channel.send("" , {files: [__dirname + "/data/" + message.id + ".mp3"]});}
                             var d = await connection.play(__dirname + "/data/" + message.id + ".mp3");
                             d.on("finish", function () {
                                 d.destroy();
@@ -328,9 +366,12 @@ bot.on("message", async function (message) {
                             fs.unlinkSync(__dirname + "/data/" + message.id + ".mp3");
                         }
                     }).catch(function(err) {
-                        console.log(err.stack)
-                        message.channel.send("```" + err.message + "```").catch(function(err) {});
-                        message.channel.send("Please report this to the devs @ <https://github.com/normanlol/discord-tts-bot>");
+                        console.log(err.stack);
+                        message.channel.send("```" + err.stack + "```").then(function() {
+                            message.channel.send("Please report this to the devs @ <https://github.com/normanlol/discord-tts-bot>");
+                        }).catch(function(err) {
+                            message.channel.send("The error that occuredcould not be posted to Discord. Tell the operator to check the logs.");
+                        });
                     });
                 }
             }
